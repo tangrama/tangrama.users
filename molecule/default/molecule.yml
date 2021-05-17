@@ -1,0 +1,54 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+lint: |
+  set -e
+  yamllint .
+  ansible-lint .
+  flake8
+platforms:
+  - name: ubuntu1804
+    image: ubuntu:18.04
+    privileged: true
+    capabilities:
+      - SYS_ADMIN
+      - SYSLOG
+      - NET_ADMIN
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  - name: ubuntu2004
+    image: ubuntu:20.04
+    privileged: true
+    capabilities:
+      - SYS_ADMIN
+      - SYSLOG
+      - NET_ADMIN
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+provisioner:
+  name: ansible
+  inventory:
+    host_vars:
+      ubuntu1804:
+        ansible_user: ansible
+        ansible_python_interpreter: /usr/bin/python3
+      ubuntu2004:
+        ansible_user: ansible
+        ansible_python_interpreter: /usr/bin/python3
+verifier:
+  name: testinfra
+scenario:
+  test_sequence:  # Remove idempotence (as docker + ubuntu + hostname seems to break)
+    - lint
+    - destroy
+    - dependency
+    - syntax
+    - create
+    - prepare
+    - converge
+    - side_effect
+    - verify
+    - cleanup
+    - destroy

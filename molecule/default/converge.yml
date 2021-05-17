@@ -1,0 +1,41 @@
+---
+- name: Converge
+  hosts: all
+  roles:
+    - role: tangrama.users
+
+  vars:
+    users:
+      'guido':
+        name: 'Guido van Rossum'
+        email: 'bdfl@python.org'
+        public_keys:
+          - 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDHT+n5ex8TI/4MM6lwlpMj/ZTNaiqoPfnZnhn3MNPKkKXQQUFdNV9OiClQYcOhhvq2ZIiK/DEax4z7qVy7XRTlM7/nVs1Gcito2MOdaNJA+1rUfiRc8PoB6WRG3MSP80e5wrQg65slcQ8he+/W3aGvJVhxMv39LJ1bOf96QrrX9fAOWLfxdCD46DTPPX+Ie24z0QDCJ0p5IreevfKUaBnLTQEtIxE+tWcDrGSGoKuvJszukcwwt2KukiNCiUykOGYPouONhLIFiWGgdXDLXkcXP4D8JAe7l+48C2lOAZzg1QVolvfmz/sXcDO2GS6biXQqgj0I9PIsuGw/U76YG9+P guido@abc.local'
+        password: '$5$vIvCpGfkL.nGx7GB$6dfT9W8ad/Nk7VBWfQM6pBHHKceaOJozOaYPTBDRxn9'
+        state: present
+        shell: '/bin/bash'
+        groups:
+          - 'sudo'
+          - 'devops'
+      'dtremea':
+        name: 'Dorneles Tremea'
+        email: 'deo@plone.org'
+        public_keys:
+          - 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDHT+n5ex8TI/4MM6lwlpMj/ZTNaiqoPfnZnhn3MNPKkKXQQUFdNV9OiClQYcOhhvq2ZIiK/DEax4z7qVy7XRTlM7/nVs1Gcito2MOdaNJA+1rUfiRc8PoB6WRG3MSP80e5wrQg65slcQ8he+/W3aGvJVhxMv39LJ1bOf96QrrX9fAOWLfxdCD46DTPPX+Ie24z0QDCJ0p5IreevfKUaBnLTQEtIxE+tWcDrGSGoKuvJszukcwwt2KukiNCiUykOGYPouONhLIFiWGgdXDLXkcXP4D8JAe7l+48C2lOAZzg1QVolvfmz/sXcDO2GS6biXQqgj0I9PIsuGw/U76YG9+P dtremea@plone.local'
+          - 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACBQDHT+n5ex8FI/4MM6lwlpMj/ZTNaiqoPfnZnhn3MNPKkKXQQUFdNV9OiClQYcOhhvq2ZIiK/DEax4z7qVy7XRTlM7/nVs1Gcito2MOdaNJA+1rUfiRc8PoB6WRG3MSP80e5wrQg65slcQ8he+/W3aGvJVhxMv39LJ1bOf96QrrX9fAOWLfxdCD46DTPPX+Ie24z0QDCJ0p5IreevfKUaBnLTQEtIxE+tWcDrGSGoKuvJszukcwwt2KukiNCiUykOGYPouONhLIFiWGgdXDLXkcXP4D8JAe7l+48C2lOAZzg1QVolvfmz/sXcDO2GS6biXQqgj0I9PIsuGw/U76YG9+P dtremea@plone2.local'
+        password: '$5$i5mvDOW67u1Z2Uv2$a6/CsZ1VXLRWVLGSYfcc48CW/s76NzUKU0zYsBnBqj.'
+        state: present
+        shell: '/bin/bash'
+        groups:
+          - 'developers'
+      'larry':
+        name: 'Larry Wall'
+        email: 'larry@perl.org'
+        state: absent
+    user_groups:
+      devops:
+        description: 'Tangrama Team'
+        state: present
+      developers:
+        description: 'Developers'
+        state: present

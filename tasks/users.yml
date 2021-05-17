@@ -1,0 +1,23 @@
+---
+# User management
+- name: Manage user "{{ user_info.value.email }}"
+  become: true
+  user:
+    name: "{{ user_info.key }}"
+    comment: "{{ user_info.value.name | default(user_info.key) }}"
+    groups: "{{ user_info.value.groups | default([]) }}"
+    shell: "{{ user_info.value.shell | default('') }}"
+    password: "{{ user_info.value.password | default('') }}"
+    update_password: "{{ user_info.value.update_password | default('on_create') }}"
+    remove: yes  # Only affects if state == absent
+    append: yes
+    state: "{{ user_info.value.state | default('present') }}"
+
+- name: Set SSH Key for "{{ user_info.value.email }}"
+  become: true
+  authorized_key:
+    user: "{{ user_info.key }}"
+    key: "{{ item }}"
+    key_options: "{{ user_info.value.key_options | default('') }}"
+  loop: "{{ user_info.value.public_keys }}"
+  when: ((user_info.value.state is not defined) or user_info.value.state == 'present') and user_info.value.public_keys is defined

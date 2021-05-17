@@ -1,0 +1,15 @@
+---
+# tasks file for tangrama.users
+# Settings management
+- import_tasks: settings.yml
+
+# Groups management (Expects a variable called user_groups)
+- import_tasks: groups.yml
+
+# Users management (Expects a variable called users)
+- name: Manage users
+  include_tasks: users.yml
+  loop: "{{ users|dict2items }}"
+  loop_control:
+    loop_var: user_info
+    label: "{{ user_info.key }}"

@@ -1,0 +1,8 @@
+---
+# Groups management
+- name: Groups management
+  become: true
+  group:
+    name: "{{ item.key }}"
+    state: "{{ item.value.state | default('present') }}"
+  with_dict: "{{ user_groups }}"

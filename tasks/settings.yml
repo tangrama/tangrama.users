@@ -1,0 +1,39 @@
+---
+# Manage sudoers
+- name: Ensure Sudo group exists
+  become: true
+  group:
+    name: sudo
+    system: yes
+    state: present
+
+- name: Make sure we can sudo as devops group
+  become: true
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    line: '%sudo ALL=(ALL) NOPASSWD: ALL'
+    backup: yes
+    validate: 'visudo -cf %s'
+
+- name: Add entry for rsync without password
+  become: true
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    line: '%{{ item }} ALL=NOPASSWD:/usr/bin/rsync'
+    backup: yes
+    validate: 'visudo -cf %s'
+  with_items:
+    - bots
+    - devops
+
+- name: Add ssh agent line to sudoers
+  become: true
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: SSH_AUTH_SOCK
+    backup: yes
+    line: Defaults env_keep += "SSH_AUTH_SOCK"
+    validate: 'visudo -cf %s'
